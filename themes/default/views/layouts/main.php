@@ -51,16 +51,30 @@
              <?php if (Yii::app()->hasModule('menu')): ?>
                 <?php $this->widget('application.modules.menu.widgets.MenuWidget', ['name' => 'top-menu']); ?>
             <?php endif; ?>
-            <?php if (Yii::app()->hasModule('blog')): ?>
 
-                <div class="widget tags-cloud-widget">
-                    <div class="tag-button"><i class="glyphicon glyphicon-tags"></i></div>
-                    <?php if($this->beginCache('application.modules.blog.widgets.TagCloudWidget', ['duration' => $this->yupe->coreCacheTime])):?>
-                        <?php $this->widget('application.modules.blog.widgets.TagCloudWidget', ['limit' => 50]); ?>
-                    <?php $this->endCache();?>
-                    <?php endif;?>
-                </div>
-            <?php endif; ?>
+            <div id="tabs-site" class="tabbable tabs-site">
+				<ul class="nav nav-tabs">
+					<li><a href="#tab1" data-toggle="tab" class="login-button"><i class="glyphicon glyphicon-user"></i></a></li>
+					<li><a href="#tab2" data-toggle="tab" class="tag-button"><i class="glyphicon glyphicon-tags"></i></a></li>
+				</ul>
+				<div class="tab-content">
+		            <?php if (Yii::app()->hasModule('blog')): ?>
+		                <div id="tab2" class="widget tags-cloud-widget tab-pane">
+		                    <?php if($this->beginCache('application.modules.blog.widgets.TagCloudWidget', ['duration' => $this->yupe->coreCacheTime])):?>
+		                        <?php $this->widget('application.modules.blog.widgets.TagCloudWidget', ['limit' => 50]); ?>
+		                    <?php $this->endCache();?>
+		                    <?php endif;?>
+		                </div>
+		            <?php endif; ?>
+
+		            <?php if (Yii::app()->getUser()->isAuthenticated()): ?>
+		                <div id="tab1" class="widget last-login-users-widget tab-pane">
+		                    <?php $this->widget('application.modules.user.widgets.ProfileWidget'); ?>
+		                </div>
+		            <?php endif; ?>
+	        	</div>
+	        	<div class="removeTab"></div>
+            </div>
             <?/*<?php if (Yii::app()->hasModule('blog')): ?>
                 <?php Yii::import('application.modules.blog.BlogModule'); ?>
                 <p>
@@ -164,13 +178,6 @@
                 </div>
             <?php endif; ?>*/?>
 
-             <?php if (Yii::app()->getUser()->isAuthenticated()): ?>
-                        <div class="widget last-login-users-widget">
-                            <div class="login-button"><i class="glyphicon glyphicon-user"></i></div>
-                            <?php $this->widget('application.modules.user.widgets.ProfileWidget'); ?>
-                        </div>
-                    <?php endif; ?>
-
         </aside>
         <!-- sidebar end -->
 
@@ -209,19 +216,37 @@
 
 <?php \yupe\components\TemplateEvent::fire(DefautThemeEvents::BODY_END);?>
 <script>
+
+
     //Выплывающая панель тегов
     jQuery(".tag-button").click(function(){
-        jQuery(".tags-cloud-widget").toggleClass("active");
-        jQuery("html").toggleClass("active");
+        jQuery(".tabs-site").addClass("active");
+        jQuery(".tabs-site").removeClass("off");
+        jQuery(".tag-button").addClass("removeTab");
+        jQuery(".login-button").removeClass("removeTab");
 
     });
 
     //Выплывающая панель профиля
     jQuery(".login-button").click(function(){
-        jQuery(".last-login-users-widget").toggleClass("active");
-        jQuery("html").toggleClass("active");
+        jQuery(".tabs-site").addClass("active");
+        jQuery(".tabs-site").removeClass("off");
+        jQuery(".login-button").addClass("removeTab");
+        jQuery(".tag-button").removeClass("removeTab");
 
     });
+
+    $(function() {
+    $('#toggle-link').click(function(event) {
+        $('#message').toggle();
+    });
+	    $(document).click(function (event) {
+	        if ($(event.target).closest('#tabs-site').length == 0 && $(event.target).attr('class') != 'removeTab') {
+	            $('#tabs-site').addClass("off");
+	        }
+	    });
+	});
+    
 </script>
 </body>
 </html>

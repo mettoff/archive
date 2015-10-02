@@ -1,10 +1,14 @@
 <?php Yii::import('application.modules.user.UserModule'); ?>
-<div class="pull-right panel panel-default">
+<div class="pull-left panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title" style="display: inline;"><?= $user->first_name; ?> <?= $user->last_name; ?></h3>
+        <div class="clearfix"></div>
+    </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-xs-12">
                 <div class="right text-left profil-mini-desc">
-                    <p><i class="glyphicon glyphicon-user"></i> <?= $user->first_name; ?> <?= $user->last_name; ?></p>
+                    <p><i class="glyphicon glyphicon-map-marker"></i> <?= $user->location; ?></p>
                     <p class="email"><i class="glyphicon glyphicon-envelope"></i> <?= $user->email; ?></p>
                     <p>
                         <?php $this->widget(
