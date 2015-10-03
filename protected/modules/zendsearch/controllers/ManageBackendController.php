@@ -103,7 +103,7 @@ class ManageBackendController extends yupe\components\controllers\BackController
                                 $node->$model['linkColumn'],
                                 $model['linkPattern']
                             );
-                            $doc->addField(Zend_Search_Lucene_Field::Text('link', $link, 'UTF-8'));
+                            $doc->addField(Zend_Search_Lucene_Field::Text('link', $link, 'UTF-8', [".html"]));
                             $contentColumns = explode(',', $model['textColumns']);
                             $i = 0;
                             foreach ($contentColumns as $column) {

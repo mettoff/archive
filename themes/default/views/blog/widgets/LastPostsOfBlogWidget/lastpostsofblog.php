@@ -10,35 +10,10 @@
         <?php foreach ($posts as $post): ?>
             <div class="posts-list-block">
                 <div class="posts-list-block-header">
-                    <?= CHtml::link(
-                        CHtml::encode($post->title),
-                        $post->getUrl()
-                    ); ?>
+                    <h2 class="title"><?= CHtml::link(CHtml::encode($post->title),$post->getUrl()); ?></h2>
                 </div>
 
                 <div class="posts-list-block-meta">
-                    <span>
-                        <i class="glyphicon glyphicon-user"></i>
-
-                        <?php $this->widget(
-                            'application.modules.user.widgets.UserPopupInfoWidget',
-                            [
-                                'model' => $post->createUser
-                            ]
-                        ); ?>
-                    </span>
-
-                    <span>
-                        <i class="glyphicon glyphicon-pencil"></i>
-
-                        <?= CHtml::link(
-                            CHtml::encode($post->blog->name),
-                            [
-                                '/blog/blog/view/',
-                                'slug' => CHtml::encode($post->blog->slug)
-                            ]
-                        ); ?>
-                    </span>
 
                     <span>
                         <i class="glyphicon glyphicon-calendar"></i>
@@ -49,18 +24,8 @@
                             "short"
                         ); ?>
                     </span>
-                </div>
 
-                <div class="posts-list-block-text">
-                    <p>
-                        <?= $post->getImageUrl() ? CHtml::image($post->getImageUrl(), CHtml::encode($post->title), ['class' => 'img-responsive']) : ''; ?>
-                    </p>
-                    <?= strip_tags($post->getQuote()); ?>
-                </div>
-
-                <div class="posts-list-block-tags">
-                    <div>
-                        <span class="posts-list-block-tags-block">
+                    <span class="posts-list-block-tags-block">
                             <i class="glyphicon glyphicon-tags"></i>
 
                             <?= Yii::t('BlogModule.blog', 'Tags'); ?>:
@@ -83,7 +48,6 @@
                                 $post->getUrl(['#' => 'comments'])
                             ); ?>
                         </span>
-                    </div>
                 </div>
             </div>
         <?php endforeach; ?>

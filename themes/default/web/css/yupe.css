@@ -748,12 +748,6 @@ a.reply {
     text-decoration: none;
 }
 
-.posts-list-block-tags-comments {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-}
-
 .auth-services {
     padding: 0;
 }

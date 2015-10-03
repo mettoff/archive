@@ -45,7 +45,6 @@
 
     <div class="row">
        
-      
          <!-- sidebar -->
         <aside class="sidebar">    
              <?php if (Yii::app()->hasModule('menu')): ?>
@@ -54,8 +53,11 @@
 
             <div id="tabs-site" class="tabbable tabs-site">
 				<ul class="nav nav-tabs">
-					<li><a href="#tab1" data-toggle="tab" class="login-button"><i class="glyphicon glyphicon-user"></i></a></li>
-					<li><a href="#tab2" data-toggle="tab" class="tag-button"><i class="glyphicon glyphicon-tags"></i></a></li>
+					<?php if (Yii::app()->getUser()->isAuthenticated()): ?>
+						<li id="li-user"><a href="#tab1" data-toggle="tab" class="login-button"><i class="glyphicon glyphicon-user"></i></a></li>
+					<?php endif; ?>
+					<li id="li-tag" ><a href="#tab2" data-toggle="tab" class="tag-button"><i class="glyphicon glyphicon-tags"></i></a></li>
+					<li id="li-search"><a href="#tab3" data-toggle="tab" class="search-button"><i class="glyphicon glyphicon-search"></i></a></li>
 				</ul>
 				<div class="tab-content">
 		            <?php if (Yii::app()->hasModule('blog')): ?>
@@ -72,8 +74,14 @@
 		                    <?php $this->widget('application.modules.user.widgets.ProfileWidget'); ?>
 		                </div>
 		            <?php endif; ?>
+
+		            <div id="tab3" class="widget widget-form-zendsearch tab-pane">
+		                <?php $this->widget('application.modules.zendsearch.widgets.SearchBlockWidget'); ?>
+		            </div>
+
 	        	</div>
 	        	<div class="removeTab"></div>
+
             </div>
             <?/*<?php if (Yii::app()->hasModule('blog')): ?>
                 <?php Yii::import('application.modules.blog.BlogModule'); ?>
@@ -224,6 +232,18 @@
         jQuery(".tabs-site").removeClass("off");
         jQuery(".tag-button").addClass("removeTab");
         jQuery(".login-button").removeClass("removeTab");
+        jQuery(".search-button").removeClass("removeTab");
+
+    });
+
+
+    //Выплывающая панель поиска
+    jQuery(".search-button").click(function(){
+        jQuery(".tabs-site").addClass("active");
+        jQuery(".tabs-site").removeClass("off");
+        jQuery(".tag-button").addClass("removeTab");
+        jQuery(".login-button").removeClass("removeTab");
+        jQuery(".tag-button").removeClass("removeTab");
 
     });
 
@@ -233,9 +253,24 @@
         jQuery(".tabs-site").removeClass("off");
         jQuery(".login-button").addClass("removeTab");
         jQuery(".tag-button").removeClass("removeTab");
+        jQuery(".search-button").removeClass("removeTab");
 
     });
 
+    //Добавление класса выплывающей панели при скроле
+    var $block = $("#tabs-site") 
+	var scrollTreshold = 41 
+	var fixedClass = "top-fixed" 
+	$(window).scroll(function(){
+		if($(window).scrollTop()>scrollTreshold){
+			$block.addClass(fixedClass)
+		}
+		else{
+			$block.removeClass(fixedClass)
+		}
+	})
+
+	//Убираем выплывающую панель при клике вне этой панели
     $(function() {
     $('#toggle-link').click(function(event) {
         $('#message').toggle();
@@ -246,6 +281,8 @@
 	        }
 	    });
 	});
+
+	
     
 </script>
 </body>

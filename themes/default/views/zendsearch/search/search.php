@@ -4,8 +4,8 @@ $this->breadcrumbs = [
     Yii::t('ZendSearchModule.zendsearch', 'Search by request: ') . CHtml::encode($term),
 ];
 ?>
-<h1><?= Yii::t('ZendSearchModule.zendsearch', 'Search by request: '); ?> "<?= CHtml::encode($term); ?>
-    "</h1>
+<h2><?= Yii::t('ZendSearchModule.zendsearch', 'Search by request: '); ?> "<?= CHtml::encode($term); ?>
+    "</h2>
 
 <?= CHtml::beginForm(['/zendsearch/search/search'], 'get', ['class' => 'form-inline']); ?>
 <?= CHtml::textField(
@@ -22,35 +22,37 @@ $this->breadcrumbs = [
 
 <?php if (!empty($results)): ?>
     <h3><?= Yii::t('ZendSearchModule.zendsearch', 'Results:'); ?></h3>
-    <?php foreach ($results as $result): ?>
-        <?php
-        $resultLink = '/';
-        $paramsArray = [];
+    <div class="items">
+        <?php foreach ($results as $result): ?>
+            <?php
+            $resultLink = '/';
+            $paramsArray = [];
 
-        $linkArray = explode('?', $result->link);
-        if (isset($linkArray[0])) {
-            $resultLink = $linkArray[0];
-        } else {
-            $resultLink = $result->link;
-        }
-
-        if (isset($linkArray[1])) {
-            foreach (explode('&', $linkArray[1]) as $param) {
-                $paramArray = explode('=', $param);
-                $paramsArray[$paramArray[0]] = $paramArray[1];
+            $linkArray = explode('?', $result->link);
+            if (isset($linkArray[0])) {
+                $resultLink = $linkArray[0];
+            } else {
+                $resultLink = $result->link;
             }
-        }
-        ?>
 
-        <h3>
-            <?= $query->highlightMatches(
-                CHtml::link(CHtml::encode($result->title), CController::CreateUrl($resultLink, $paramsArray)),
-                'UTF-8'
-            ); ?>
-        </h3>
-        <p><?= $query->highlightMatches($result->description, 'UTF-8'); ?></p>
-        <hr/>
-    <?php endforeach; ?>
+            if (isset($linkArray[1])) {
+                foreach (explode('&', $linkArray[1]) as $param) {
+                    $paramArray = explode('=', $param);
+                    $paramsArray[$paramArray[0]] = $paramArray[1];
+                }
+            }
+            ?>
+
+            <h2 class="title">
+                <?= $query->highlightMatches(
+                    CHtml::link(CHtml::encode($result->title), CController::CreateUrl($resultLink, $paramsArray)),
+                    'UTF-8'
+                ); ?>
+            </h2>
+            <p><?= $query->highlightMatches($result->description, 'UTF-8'); ?></p>
+            <hr/>
+        <?php endforeach; ?>
+    </div>
 
 <?php else: ?>
     <p class="error"><?= Yii::t('ZendSearchModule.zendsearch', 'Nothing was found'); ?></p>
